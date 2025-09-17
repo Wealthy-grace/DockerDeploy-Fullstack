@@ -1,18 +1,12 @@
-package com.example.springsecuritydemo2025.domain.request;
-
-import com.example.springsecuritydemo2025.persistence.entity.Role;
+package com.example.dockerdeployfullstack.domain.request;
+import com.example.dockerdeployfullstack.persistence.Entity.Role;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @Builder
 @Data

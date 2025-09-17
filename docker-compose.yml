@@ -1,76 +1,90 @@
+#version: '3.8'
 #
-#version: '3'
 #services:
-#  backend:
-#    build:
-#      context: ./backend # Path to your backend Dockerfile directory.
-#      dockerfile: Dockerfile # Dockerfile name if different.
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db/bconnect?useSSL=false&serverTimezone=UTC
-#      SPRING_DATASOURCE_USERNAME: root
-#      SPRING_DATASOURCE_PASSWORD: Server123@
-#
-#  frontend:
-#    build:
-#      context: ./frontend # Path to your frontend Dockerfile directory.
-#      dockerfile: Dockerfile # Dockerfile name if different.
-#    ports:
-#      - "4200:80"
-#
 #  db:
-#    image: mysql:8
+#    image: mysql:8.0
+#    container_name: blog-database
 #    environment:
 #      MYSQL_ROOT_PASSWORD: Server123@
-#      MYSQL_DATABASE: bconnect
-#    volumes:
-#      - mysql-data:/var/lib/mysql
+#      MYSQL_DATABASE: blog
+#    ports:
+#      - "3307:3306"
+#    healthcheck:
+#      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pServer123@"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    networks:
+#      - backend
 #
-#volumes:
-#  mysql-data:
+#  spring-app:
+#    build: .
+#    container_name: blog-backend
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/blog?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: Server123@
+#      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+#      SERVER_ADDRESS: 0.0.0.0
+#    networks:
+#      - backend
+#
+#networks:
+#  backend:
 
+
+#testing to check
 
 version: '3.8'
 
 services:
-  mysql:
+  db:
     image: mysql:8.0
-    container_name: mysql
+    container_name: blog-database
     environment:
-      MYSQL_DATABASE: blog
       MYSQL_ROOT_PASSWORD: Server123@
+      MYSQL_DATABASE: blog
+      MYSQL_ROOT_HOST: '%'
     ports:
-      - '3316:3306' # Host port:Container port
+      - "3307:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - blog_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pServer123@" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    command: --default-authentication-plugin=mysql_native_password
     networks:
-      - springboot-mysql
-    restart: unless-stopped  # Ensure MySQL container restarts if it fails
+      - backend
+    restart: unless-stopped
 
-  app:
-    build:
-      context: ../..  # Adjust to the correct context if needed
-      dockerfile: Dockerfile
-    container_name: springboot
+  spring-app:
+    build: .
+    container_name: blog-backend
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
-      - '8090:8080'  # Host port:Container port
+      - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/blog
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/blog?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: Server123@
-    depends_on:
-      - mysql  # Waits for MySQL to be ready
     networks:
-      - springboot-mysql
-    volumes:
-      - app-data:/app/uploads
-    restart: unless-stopped  # Ensure Spring Boot container restarts if it fails
+      - backend
+    restart: unless-stopped
 
 volumes:
-  mysql-data:
-  app-data:
+  blog_mysql_data:
 
 networks:
-  springboot-mysql:
+  backend:
     driver: bridge

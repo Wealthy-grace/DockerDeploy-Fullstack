@@ -1,6 +1,7 @@
-package com.example.springsecuritydemo2025.domain.response;
+package com.example.dockerdeployfullstack.domain.response;
 
-import com.example.springsecuritydemo2025.domain.dto.UserDto;
+
+import com.example.dockerdeployfullstack.domain.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SignUpResponse {
 
+    private Long id;
     private String message;
 
     private UserDto user;

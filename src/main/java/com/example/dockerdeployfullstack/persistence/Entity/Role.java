@@ -1,4 +1,4 @@
-package com.example.dockerdeployfullstack.Entity;
+package com.example.dockerdeployfullstack.persistence.Entity;
 
 public enum Role {
 

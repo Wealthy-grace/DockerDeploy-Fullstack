@@ -1,6 +1,7 @@
-package com.example.springsecuritydemo2025.persistence.repository;
+package com.example.dockerdeployfullstack.persistence;
 
-import com.example.springsecuritydemo2025.persistence.entity.UserEntity;
+
+import com.example.dockerdeployfullstack.persistence.Entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

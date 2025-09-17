@@ -1,7 +1,7 @@
-package com.example.springsecuritydemo2025.configuration.exceptions;
+package com.example.dockerdeployfullstack.exceptions;
 
-public class BookAlreadyExistsException extends RuntimeException {
-    public BookAlreadyExistsException(String message) {
+public class UserAlreadyExistsException extends RuntimeException {
+    public UserAlreadyExistsException(String message) {
         super(message);
     }
 }

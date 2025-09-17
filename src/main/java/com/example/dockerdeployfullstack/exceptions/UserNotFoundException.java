@@ -1,7 +1,7 @@
-package com.example.springsecuritydemo2025.configuration.exceptions;
+package com.example.dockerdeployfullstack.exceptions;
 
-public class BookNotFoundException extends RuntimeException {
-    public BookNotFoundException(String message) {
+public class UserNotFoundException extends RuntimeException {
+    public UserNotFoundException(String message) {
         super(message);
     }
 }

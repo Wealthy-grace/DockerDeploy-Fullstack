@@ -1,2 +1,16 @@
-package com.example.dockerdeployfullstack.exceptions;public class ErrorResponse {
+package com.example.dockerdeployfullstack.exceptions;
+
+
+
+import lombok.Data;
+
+@Data
+public class ErrorResponse {
+    private int status;
+    private String message;
+
+    public ErrorResponse(int status, String message) {
+        this.status = status;
+        this.message = message;
+    }
 }

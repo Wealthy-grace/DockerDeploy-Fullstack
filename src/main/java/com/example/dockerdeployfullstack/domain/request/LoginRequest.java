@@ -1,4 +1,4 @@
-package com.example.springsecuritydemo2025.domain.request;
+package com.example.dockerdeployfullstack.domain.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,6 @@
-package com.example.springsecuritydemo2025.domain.dto;
+package com.example.dockerdeployfullstack.domain.dto;
 
-import com.example.springsecuritydemo2025.persistence.entity.UserEntity;
+import com.example.dockerdeployfullstack.persistence.Entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

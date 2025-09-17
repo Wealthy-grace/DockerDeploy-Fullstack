@@ -1,6 +1,5 @@
-package com.example.springsecuritydemo2025.domain.response;
-
-import com.example.springsecuritydemo2025.domain.dto.UserDto;
+package com.example.dockerdeployfullstack.domain.response;
+import com.example.dockerdeployfullstack.domain.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

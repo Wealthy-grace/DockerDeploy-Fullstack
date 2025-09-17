@@ -1,4 +1,4 @@
-package com.example.dockerdeployfullstack.Entity;
+package com.example.dockerdeployfullstack.persistence.Entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

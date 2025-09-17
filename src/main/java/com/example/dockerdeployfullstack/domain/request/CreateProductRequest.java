@@ -1,4 +1,4 @@
-package com.example.dockerdeployfullstack.domain;
+package com.example.dockerdeployfullstack.domain.request;
 
 import jakarta.persistence.Column;
 import lombok.Data;

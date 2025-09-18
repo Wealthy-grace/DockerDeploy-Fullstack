@@ -1,5 +1,4 @@
-version: "3.8"
-
+# Remove version - it's obsolete in Docker Compose V2
 services:
   db:
     image: mysql:8.0
@@ -36,9 +35,18 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/blog?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: Server123@
+      # Add actuator configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS: always
     networks:
       - backend
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
 volumes:
   blog_mysql_data:

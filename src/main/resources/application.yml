@@ -1,52 +1,37 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3307/blog?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    url: jdbc:mysql://db:3306/blog?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
     password: Server123@
     driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true
-        use_sql_comments: true
+
   flyway:
     enabled: true
-    clean-disabled: false
-  docker:
-    compose:
-      enabled: false
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 1
+    out-of-order: true
+    validate-on-migrate: true
+
+  jpa:
+    hibernate:
+      ddl-auto: none               # lowercase value for enum
+    show-sql: true                # boolean
+    open-in-view: false           # boolean
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+      hibernate.format_sql: true
+      hibernate.transaction.jta.platform: org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform
+
+server:
+  port: 8081
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info       # expose actuator endpoints health and info
   endpoint:
     health:
       probes:
-        enabled: true
-
-server:
-  port: 8080
-
-logging:
-  level:
-    root: INFO
-    com.example: DEBUG
-    org.springframework: INFO
-
-    management:
-      endpoints:
-        web:
-          exposure:
-            include: health,info
-      endpoint:
-        health:
-          probes:
-            enabled: true
-
-
+        enabled: true              # enable health probes for readiness/liveness

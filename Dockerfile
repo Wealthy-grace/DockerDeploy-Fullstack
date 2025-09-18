@@ -10,11 +10,16 @@ COPY --chown=gradle:gradle . .
 # Make Gradle wrapper executable
 RUN chmod +x ./gradlew
 
-# Build the project, skipping tests for faster build (optional)
+# Build the project, skipping tests for faster build
 RUN ./gradlew --no-daemon clean build -x test
 
 # Runtime stage - use lightweight OpenJDK 21 slim image
 FROM openjdk:21-jdk-slim
+
+# Install curl for health checks
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set working directory inside the runtime container
 WORKDIR /app
@@ -27,6 +32,10 @@ EXPOSE 8081
 
 # Set environment variables (timezone and locale)
 ENV TZ=UTC LANG=C.UTF-8
+
+# Add health check for Docker Compose
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:8081/actuator/health || exit 1
 
 # Run the app
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

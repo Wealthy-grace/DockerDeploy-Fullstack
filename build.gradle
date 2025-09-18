@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.0'
-    id 'io.spring.dependency-management' version '1.1.6' // Optional but common for BOM management
+    id 'io.spring.dependency-management' version '1.1.6'
 }
 
 group = 'com.example'
@@ -18,15 +18,13 @@ repositories {
 }
 
 dependencies {
-    // Use Spring Boot BOM for dependency version control
-    implementation platform("org.springframework.boot:spring-boot-dependencies:3.4.0")
-
     // Spring Boot starters
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
-    implementation 'org.springframework.ws:spring-ws-core'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'  // ← ADD THIS for health checks
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.ws:spring-ws-core'
 
     // Development tools
     compileOnly 'org.projectlombok:lombok:1.18.42'
@@ -38,11 +36,12 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
 
-    // MySQL driver runtime only
+    // MySQL driver for production
     runtimeOnly 'com.mysql:mysql-connector-j'
 
-    // Testing
+    // Testing dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.h2database:h2'  // ← ADD THIS for test database
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // Uncomment if security needed
@@ -56,4 +55,12 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+
+    // Set test system properties for better test isolation
+    systemProperty 'spring.profiles.active', 'test'
+}
+
+// Optional: Configure bootJar task
+tasks.named('bootJar') {
+    archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
 }

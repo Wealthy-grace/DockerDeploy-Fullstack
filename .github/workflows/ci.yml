@@ -57,7 +57,7 @@ jobs:
           done
           if [ $counter -ge $timeout ]; then
             echo "❌ MySQL failed to start within $timeout seconds"
-            docker compose logs db
+            docker compose logs blog-database
             exit 1
           fi
 
@@ -65,7 +65,7 @@ jobs:
       - name: Check Spring Boot application logs
         run: |
           echo "📋 Spring Boot app logs:"
-          docker compose logs spring-app
+          docker compose logs blog-backend
           echo "🔍 Container status:"
           docker ps -a
 
@@ -78,7 +78,7 @@ jobs:
           while [ $counter -lt $timeout ]; do
             if ! docker ps --format "{{.Names}}" | grep -q "blog-backend"; then
               echo "❌ Spring Boot container is not running!"
-              docker compose logs spring-app
+              docker compose logs blog-backend
               exit 1
             fi
             if curl -f -s http://localhost:8081/actuator/health >/dev/null 2>&1 || \
@@ -94,15 +94,15 @@ jobs:
           if [ $counter -ge $timeout ]; then
             echo "❌ Spring Boot failed to start within $timeout seconds"
             echo "📋 Spring Boot logs:"
-            docker compose logs spring-app
+            docker compose logs blog-backend
             echo "📋 MySQL logs:"
-            docker compose logs db
+            docker compose logs blog-database
             echo "🔍 Container status:"
             docker ps -a
             exit 1
           fi
 
-      # 9️⃣ Run Gradle tests inside blog-backend (if configured with gradlew)
+      # 9️⃣ Run Gradle tests inside blog-backend (with gradlew permission fix)
       - name: Run Gradle build and tests
         run: |
           echo "Running Gradle build and tests..."
@@ -160,7 +160,7 @@ jobs:
           echo "🔍 Docker images:"
           docker images
 
-      # 1️⃣4️⃣ Clean up
+      # 1️⃣4️⃣ Clean up Docker Compose
       - name: Clean up Docker Compose
         if: always()
         run: |

@@ -1,0 +1,49 @@
+name: Build and Submit Gradle Dependency Graph
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: write  # Needed for dependency graph submission
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the source code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Java 17
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # Step 3: Set up Gradle environment
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # Step 4: Give executable permission to gradlew script
+      - name: Fix gradlew permission
+        run: chmod +x ./gradlew
+
+      # Step 5: Run the Gradle build
+      - name: Build project
+        run: ./gradlew clean build --no-daemon
+
+      # Step 6: Generate and submit dependency graph to GitHub
+      - name: Submit dependency graph
+        uses: gradle/actions/dependency-submission@v4
+        with:
+          use-gradlew: true
+          gradle-command: clean build

@@ -44,6 +44,8 @@ dependencies {
     testImplementation 'com.h2database:h2'  // ← ADD THIS for test database
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     // Uncomment if security needed
     // implementation 'org.springframework.boot:spring-boot-starter-security'
 

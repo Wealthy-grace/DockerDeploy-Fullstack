@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   db:
     image: mysql:8.0
@@ -22,7 +24,7 @@ services:
     restart: unless-stopped
 
   spring-app:
-    build: .
+    image: godfrey10/dockerdeploy-fullstack:latest
     container_name: blog-backend
     depends_on:
       db:

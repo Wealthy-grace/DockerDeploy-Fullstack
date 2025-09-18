@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:mysql://db:3306/blog?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: Server123@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8081
+
+docker:
+  compose:
+    enabled: true
+    file: docker-compose.yml
+    lifecycle-management: start-and-stop

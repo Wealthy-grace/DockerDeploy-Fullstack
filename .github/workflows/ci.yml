@@ -220,7 +220,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
-      - name: Deploy to staging/production
+      - name: Dokcer to staging/production
   # Deploy job
   deploy:
     needs: build-and-test

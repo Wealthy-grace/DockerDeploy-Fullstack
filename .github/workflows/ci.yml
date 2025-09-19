@@ -213,14 +213,19 @@ jobs:
           docker compose down -v --remove-orphans
           docker system prune -f
 
-# Docker job
+
+ # Docker job
   docker:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
-      - name: Dokcer to staging/production
+      - name: Docker to staging/production
+        run: |
+          echo "🚀 Docker would happen here..."
+          echo "Application passed all connectivity tests!"
+
   # Deploy job
   deploy:
     needs: build-and-test

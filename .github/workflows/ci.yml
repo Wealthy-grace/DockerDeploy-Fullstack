@@ -223,8 +223,7 @@ jobs:
     steps:
       - name: Docker to staging/production
         run: |
-          echo "🚀 Docker would happen here..."
-          echo "Application passed all connectivity tests!"
+         
 
   # Deploy job
   deploy:

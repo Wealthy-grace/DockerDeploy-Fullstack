@@ -34,19 +34,16 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/blog?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: Server123@
-      # Add actuator configuration
-      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info
-      MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS: always
     networks:
       - backend
     restart: unless-stopped
     healthcheck:
-      # Try multiple endpoints - actuator first, then just check if port is responding
-      test: ["CMD-SHELL", "curl -f http://localhost:8081/actuator/health || curl -f http://localhost:8081/ || nc -z localhost 8081"]
+      # Simple port check since actuator endpoints don't exist
+      test: ["CMD-SHELL", "nc -z localhost 8081"]
       interval: 30s
       timeout: 10s
-      retries: 5
-      start_period: 90s  # Give more time for app to start
+      retries: 3
+      start_period: 60s
 
 volumes:
   blog_mysql_data:
